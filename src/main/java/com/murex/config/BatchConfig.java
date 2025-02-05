@@ -10,6 +10,7 @@ import com.murex.model.fenergo.FenergoWrapper;
 import com.murex.model.fenergo.JsonEntity;
 import com.murex.model.fenergo.workflow.Workflow;
 import com.murex.model.pruebaJson.MyObject;
+import com.murex.model.pruebaJson.WorkflowMy;
 import com.murex.processor.*;
 import com.murex.processor.fenergoprocessor.WorkFlowWriter;
 import com.murex.processor.fenergoprocessor.WorkflowProcessor;
@@ -69,6 +70,34 @@ public class BatchConfig {
     this.stepBuilderFactory = stepBuilderFactory;
     this.dataSource = dataSource;
   }
+
+  @Bean
+  @StepScope
+  public JsonItemReader<WorkflowMy> jsonItemReaderPrueba() {
+    return new JsonItemReaderBuilder<WorkflowMy>()
+            .jsonObjectReader(new JacksonJsonObjectReader<>(WorkflowMy.class))
+            .resource(new ClassPathResource("prueba2_1.json"))
+            .name("WorkflowMyJsonItemReader")
+            .build();
+  }
+  @Bean
+  public ItemProcessor<WorkflowMy, WorkflowMy> jsonItemProcessor() {
+
+    return user -> {
+      // Process user if needed
+      return user;
+    };
+
+  }
+  @Bean
+  public JsonFileItemWriter<WorkflowMy> jsonItemWriter() {
+    return new JsonFileItemWriterBuilder<WorkflowMy>()
+            .jsonObjectMarshaller(new JacksonJsonObjectMarshaller<>())
+            .resource(new FileSystemResource("output2.json"))
+            .name("jsonItemWriter")
+            .build();
+  }
+  /*    // prueba0 , se lee y escribe en un json output.json a partir del prueba.json
   @Bean
   @StepScope
   public JsonItemReader<MyObject> jsonItemReaderPrueba() {
@@ -94,6 +123,8 @@ public class BatchConfig {
             .name("jsonItemWriter")
             .build();
   }
+  */
+
    // PARA tipo de fichero ([{}, {}, ...])  -> ("1", "41", etc.).
  /* @Bean
   public JsonItemReader<JsonEntity> jsonItemReader() {
@@ -458,6 +489,20 @@ public class BatchConfig {
 
   @Bean
   public Step jsonstep(StepBuilderFactory stepBuilderFactory,
+                       JsonItemReader<WorkflowMy> jsonItemReader,
+                       WorkflowProcessor workflowProcessor,
+                       WorkFlowWriter workflowWriter) {
+    return stepBuilderFactory.get("processFenergoWorkflow")
+            .<WorkflowMy, WorkflowMy>chunk(10)
+            .reader(jsonItemReaderPrueba())
+            .processor(jsonItemProcessor())
+            .writer(jsonItemWriter())
+            .build();
+  }
+/*
+    // Este es para el prueba.json
+  @Bean
+  public Step jsonstep(StepBuilderFactory stepBuilderFactory,
                                          JsonItemReader<MyObject> jsonItemReader,
                                          WorkflowProcessor workflowProcessor,
                                          WorkFlowWriter workflowWriter) {
@@ -468,6 +513,7 @@ public class BatchConfig {
             .writer(jsonItemWriter())
             .build();
   }
+*/
 
 /*  @Bean
   public Step processWorkflowStep(StepBuilderFactory stepBuilderFactory,

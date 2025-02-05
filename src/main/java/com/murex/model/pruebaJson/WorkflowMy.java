@@ -1,7 +1,6 @@
 package com.murex.model.pruebaJson;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.murex.model.fenergo.workflow.Workflow;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
