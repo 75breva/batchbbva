@@ -1,0 +1,307 @@
+{
+    "Fenergo": {
+        "1": {
+            "LE_Details": [
+                {
+                    "BUSINESS_DETAILS": [
+                        {
+                            "BBVA_Institution_Code": "6 RESTO DE BANCOS EXTRANJEROS",
+                            "Is_this_entity_publicly_listed": "No",
+                            "Is_this_entity_regulated": "No"
+                        }
+                    ],
+                    "ADDRESSES": [
+                        {
+                            "Addres_Line_1": "Kristal Kule Binasi No 215 Kat 6-7",
+                            "Country": "Turkey",
+                            "Postal_Code_ZIP": "34394",
+                            "Address_Type": "Operational",
+                            "Town_City": "Istambul",
+                            "State_County": "Istambul"
+                        }
+                    ]
+                }
+            ],
+            "Document_Matrix": [
+                {
+                    "Document_Name": "Chamber of Commerce registration",
+                    "Created_Date": "2023-08-15",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "Constitutional Docs",
+                    "Document_Type": "Updated Chamber of Commerce extract (e.g. Registro Mercantil, Cerved, Axesor, etc.)",
+                    "Document_Status": "Received"
+                },
+                {
+                    "Document_Name": "Trade Register QNBFINANS",
+                    "Created_Date": "2022-03-14",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "Constitutional Docs",
+                    "Document_Type": "Certificate of Registration",
+                    "Document_Status": "Received"
+                }
+            ],
+            "Workflow": [
+                {
+                    "Case_Type": "Client Onboarding",
+                    "Case_Type_Status": "Complete",
+                    "Case_Created_Date": "2022-03-14"
+                },
+                {
+                    "Case_Type": "CRS Remediation",
+                    "Case_Type_Status": "New",
+                    "Case_Created_Date": "2022-03-14"
+                },
+                {
+                    "Case_Type": "Regular Review",
+                    "Case_Type_Status": "Complete",
+                    "Case_Created_Date": "2022-03-14"
+                }
+            ]
+        },
+        "41": {
+            "LE_Details": [
+                {
+                    "Customer_Details": [
+                        {
+                            "Legal_Entity_Type": "Bank",
+                            "Legal_Entity_ID": 41,
+                            "Legal_Entity_Name": "NACIONAL FINANCIERA",
+                            "Country_of_Incorporation_Establishment": "Mexico",
+                            "Country_of_Domicile": "Mexico",
+                            "LEI": "549300T46KUP3OWN3O73",
+                            "Overall_Risk_Rating": "LOW",
+                            "Sanctions": "No Match",
+                            "Previous_Name": "",
+                            "Date_of_last_name_change": "",
+                            "Trading_Name": "NACIONAL FINANCIERA SACV",
+                            "Last_Updated_Date": "2022-03-15",
+                            "Scheduled_Review_Date": "2024-05-10",
+                            "Date_of_Incorporation": "2013-12-14",
+                            "Main_BBVA_Relationship_Centre": "IFI"
+                        }
+                    ],
+                    "BUSINESS_DETAILS": [
+                        {
+                            "BBVA_Institution_Code": "6 RESTO DE BANCOS EXTRANJEROS",
+                            "Is_this_entity_publicly_listed": "Yes",
+                            "Is_this_entity_regulated": "Yes"
+                        }
+                    ],
+                    "PRODUCTS": [
+                        {
+                            "Product_Category": "FX",
+                            "Product_Type": "FX Spot",
+                            "Booking_Entity": "BBVA SA - Spain",
+                            "Status": "Active"
+                        },
+                        {
+                            "Product_Category": "Correspondent Services",
+                            "Product_Type": "RMA",
+                            "Booking_Entity": "BBVA SA - Spain",
+                            "Status": "Active"
+                        },
+                        {
+                            "Product_Category": "Correspondent Services",
+                            "Product_Type": "RMA",
+                            "Booking_Entity": "BBVA Mexico",
+                            "Status": "Cancelled"
+                        }
+                    ],
+                    "CONTACT": [],
+                    "RELATIONSHIPS": [
+                        {
+                            "User_Name": "MARIA TRINIDAD SANCHEZ ROMERO",
+                            "Relationship_Type": "Relationship Manager"
+                        }
+                    ],
+                    "ROLES": [
+                        {
+                            "Legal_Entity_Role": "Client/Counterparty",
+                            "LE_Role_Status": "Active"
+                        }
+                    ],
+                    "ACCOUNTS": [],
+                    "EXTERNAL_REFERENCES": [
+                        {
+                            "External_Reference": "1343LOCAL",
+                            "External_System": "RDR"
+                        },
+                        {
+                            "External_Reference": "15716",
+                            "External_System": "BDI"
+                        },
+                        {
+                            "External_Reference": "157164",
+                            "External_System": "Midas London"
+                        },
+                        {
+                            "External_Reference": "286250044",
+                            "External_System": "ST/MX/CLAN"
+                        },
+                        {
+                            "External_Reference": "5jb7xn2f3rjb1gvw6bxezw8pk",
+                            "External_System": "WCO Screening"
+                        },
+                        {
+                            "External_Reference": "MX30979",
+                            "External_System": "BvD"
+                        }
+                    ],
+                    "TAX": [
+                        {
+                            "Tax_Identifier": "02YNQ9.99999.SL.484",
+                            "Tax_Identifier_Type": "GIIN",
+                            "Chapter_4_FATCA_Status": "GIIN"
+                        },
+                        {
+                            "Tax_Identifier": "Unknown",
+                            "Tax_Identifier_Type": "TIN",
+                            "Chapter_4_FATCA_Status": "TIN"
+                        }
+                    ],
+                    "INDUSTRY_CODE_DETAILS": [
+                        {
+                            "NACE_2_Code": "Other monetary intermediation",
+                            "NAICS": "",
+                            "Swift_bic": "NFSAMXMMXXX"
+                        }
+                    ],
+                    "ASSOCIATED_PARTIES": [
+                        {
+                            "Relationship": "Has Branch",
+                            "Related_To": "NACIONAL FINANCIERA SNC"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Agustin Guillermo Carstens"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Eduardo Gurza Curiel"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Carlos Aguilar Villalobos"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Ildefonso Guajardo Villarreal"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Fernando Aportela Rodriguez"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Lazaro Jimenez Garcia"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Francisco Javier Funtanet Mange"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Pedro Joaquin Coldwell"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Gerardo Gutierrez Caniani"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Jorge Enrique Davila Flores"
+                        },
+                        {
+                            "Relationship": "Has Director",
+                            "Related_To": "Luis Videgaray Caso"
+                        },
+                        {
+                            "Relationship": "Has Shareholder",
+                            "Related_To": "United Mexican States"
+                        }
+                    ],
+                    "ADDRESSES": [
+                        {
+                            "Addres_Line_1": "INSURGENTES SUR 1971 0000",
+                            "Country": "Mexico",
+                            "Postal_Code_ZIP": "00000",
+                            "Address_Type": "Operational",
+                            "Town_City": "01020 MEXICO DF",
+                            "State_County": "01020 MEXICO DF"
+                        }
+                    ]
+                }
+            ],
+            "Document_Matrix": [
+                {
+                    "Document_Name": "Nacional Financiera S.N.C., I - Latest price - Charts, news and recommendations.pdf",
+                    "Created_Date": "2022-03-15",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "Client Onboarding",
+                    "Document_Type": "Listed company certification",
+                    "Document_Status": "Received"
+                },
+                {
+                    "Document_Name": "NACIONAL FINANCIERA SNC_DD REPORT.docx",
+                    "Created_Date": "2022-03-15",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "AML",
+                    "Document_Type": "BBVA Due Diligence Questionnaire",
+                    "Document_Status": "Received"
+                },
+                {
+                    "Document_Name": "NFSAMXMMXXX-Full Due Diligence Package-20130630-2364.pdf",
+                    "Created_Date": "2022-03-15",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "AML",
+                    "Document_Type": "Full Due Diligence Package",
+                    "Document_Status": "Received"
+                },
+                {
+                    "Document_Name": "NFSAMXMMXXX-Full Due Diligence Package-20130630-2365.pdf",
+                    "Created_Date": "2022-03-15",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "AML",
+                    "Document_Type": "Full Due Diligence Package",
+                    "Document_Status": "Received"
+                },
+                {
+                    "Document_Name": "pta listas y offshore.pdf",
+                    "Created_Date": "2022-03-15",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "Client Onboarding",
+                    "Document_Type": "Client Representation",
+                    "Document_Status": "Received"
+                },
+                {
+                    "Document_Name": "Wolfsberg.pdf",
+                    "Created_Date": "2022-03-15",
+                    "Tax_Form_Signed_Date": "",
+                    "Expiration_Date": "",
+                    "Document_Category": "Onboarding Docs",
+                    "Document_Type": "Wolfsberg Questionnaire",
+                    "Document_Status": "Received"
+                }
+            ],
+            "Workflow": [
+                {
+                    "Case_Type": "Client Onboarding",
+                    "Case_Type_Status": "Complete",
+                    "Case_Created_Date": "2022-03-15"
+                },
+                {
+                    "Case_Type": "Client Onboarding",
+                    "Case_Type_Status": "Complete",
+                    "Case_Created_Date": "2022-03-15"
+                }
+            ]
+        }
+    }
+}  

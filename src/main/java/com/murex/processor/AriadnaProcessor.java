@@ -20,7 +20,7 @@ public class AriadnaProcessor implements ItemProcessor<Ariadna, Ariadna>{
 //        return item;
 //    }
 
-    private static final Logger LOG = LoggerFactory.getLogger(MurexItemProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AriadnaProcessor.class);
     private Set<String> uniqueValues = new HashSet<>();
 
     @Override

@@ -1,0 +1,63 @@
+[
+    {
+        "LE_Details": [
+            {
+                "BUSINESS_DETAILS": [
+                    {
+                        "BBVA_Institution_Code": "6 RESTO DE BANCOS EXTRANJEROS",
+                        "Is_this_entity_publicly_listed": "No",
+                        "Is_this_entity_regulated": "No"
+                    }
+                ],
+                "ADDRESSES": [
+                    {
+                        "Addres_Line_1": "Kristal Kule Binasi No 215 Kat 6-7",
+                        "Country": "Turkey",
+                        "Postal_Code_ZIP": "34394",
+                        "Address_Type": "Operational",
+                        "Town_City": "Istambul",
+                        "State_County": "Istambul"
+                    }
+                ]
+            }
+        ],
+        "Document_Matrix": [
+            {
+                "Document_Name": "Chamber of Commerce registration",
+                "Created_Date": "2023-08-15",
+                "Tax_Form_Signed_Date": "",
+                "Expiration_Date": "",
+                "Document_Category": "Constitutional Docs",
+                "Document_Type": "Updated Chamber of Commerce extract (e.g. Registro Mercantil, Cerved, Axesor, etc.)",
+                "Document_Status": "Received"
+            },
+            {
+                "Document_Name": "Trade Register QNBFINANS",
+                "Created_Date": "2022-03-14",
+                "Tax_Form_Signed_Date": "",
+                "Expiration_Date": "",
+                "Document_Category": "Constitutional Docs",
+                "Document_Type": "Certificate of Registration",
+                "Document_Status": "Received"
+            }
+        ],
+        "Workflow": [
+            {
+                "Case_Type": "Client Onboarding",
+                "Case_Type_Status": "Complete",
+                "Case_Created_Date": "2022-03-14"
+            },
+            {
+                "Case_Type": "CRS Remediation",
+                "Case_Type_Status": "New",
+                "Case_Created_Date": "2022-03-14"
+            },
+            {
+                "Case_Type": "Regular Review",
+                "Case_Type_Status": "Complete",
+                "Case_Created_Date": "2022-03-14"
+            }
+        ]
+    }
+
+]  

@@ -2,10 +2,17 @@ package com.murex.config;
 
 import com.murex.model.Ariadna;
 import com.murex.model.Murex;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.murex.model.catologo.CounterPartCatalogo;
 import com.murex.model.catologo.CurlPlCatalogo;
 import com.murex.model.catologo.NumoperfrontCatalogo;
+import com.murex.model.fenergo.FenergoWrapper;
+import com.murex.model.fenergo.JsonEntity;
+import com.murex.model.fenergo.workflow.Workflow;
+import com.murex.model.pruebaJson.MyObject;
 import com.murex.processor.*;
+import com.murex.processor.fenergoprocessor.WorkFlowWriter;
+import com.murex.processor.fenergoprocessor.WorkflowProcessor;
 import com.murex.tasklet.DuplicateRecordSkipPolicy;
 import com.murex.tasklet.JobCompletionNotificationListener;
 import org.slf4j.Logger;
@@ -15,6 +22,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -26,13 +34,24 @@ import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.batch.item.json.JacksonJsonObjectMarshaller;
+import org.springframework.batch.item.json.JacksonJsonObjectReader;
+import org.springframework.batch.item.json.JsonFileItemWriter;
+import org.springframework.batch.item.json.JsonItemReader;
+import org.springframework.batch.item.json.builder.JsonFileItemWriterBuilder;
+import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
+import org.springframework.batch.item.support.CompositeItemProcessor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Configuration
 @EnableBatchProcessing
@@ -43,12 +62,77 @@ public class BatchConfig {
   private final JobBuilderFactory jobBuilderFactory;
   private final StepBuilderFactory stepBuilderFactory;
   private final DataSource dataSource;
-
+//  @Value("classpath:Fencloud_lightSimple.json")
+//  private Resource jsonFile;
   public BatchConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, DataSource dataSource) {
     this.jobBuilderFactory = jobBuilderFactory;
     this.stepBuilderFactory = stepBuilderFactory;
     this.dataSource = dataSource;
   }
+  @Bean
+  @StepScope
+  public JsonItemReader<MyObject> jsonItemReaderPrueba() {
+    return new JsonItemReaderBuilder<MyObject>()
+            .jsonObjectReader(new JacksonJsonObjectReader<>(MyObject.class))
+            .resource(new ClassPathResource("prueba.json"))
+            .name("MyObjectJsonItemReader")
+            .build();
+  }
+  @Bean
+  public ItemProcessor<MyObject, MyObject> jsonItemProcessor() {
+    return user -> {
+      // Process user if needed
+      System.out.println(" " + user.getISin() + " " + user.getCustomer() + " " + user.getQuantity() );
+      return user;
+    };
+  }
+  @Bean
+  public JsonFileItemWriter<MyObject> jsonItemWriter() {
+    return new JsonFileItemWriterBuilder<MyObject>()
+            .jsonObjectMarshaller(new JacksonJsonObjectMarshaller<>())
+            .resource(new FileSystemResource("output.json"))
+            .name("jsonItemWriter")
+            .build();
+  }
+   // PARA tipo de fichero ([{}, {}, ...])  -> ("1", "41", etc.).
+ /* @Bean
+  public JsonItemReader<JsonEntity> jsonItemReader() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    JacksonJsonObjectReader<JsonEntity> jsonObjectReader = new JacksonJsonObjectReader<>(objectMapper, JsonEntity.class);
+    jsonObjectReader.setMapper(objectMapper);
+
+    JsonItemReader<JsonEntity> reader = new JsonItemReader<>();
+    reader.setResource(new ClassPathResource("Fencloud_lightSimple.json"));
+    reader.setJsonObjectReader(jsonObjectReader);
+    // reader.setMaxItemCount(1);
+    LOG.info("Reader [Fencloud_lightSimple.json] initialized: {} ", reader);
+    return reader;
+*//*
+    return new JsonItemReaderBuilder<JsonEntity>()
+            .name("FencloudReader")
+            .jsonObjectReader(jsonObjectReader)
+            .resource(jsonFile)
+            .build();
+*//*
+
+  }*/
+
+/*
+  @Bean
+  public JsonItemReader<FenergoWrapper> jsonItemReader() {
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    JacksonJsonObjectReader<FenergoWrapper> jsonObjectReader = new JacksonJsonObjectReader<>(FenergoWrapper.class);
+    jsonObjectReader.setMapper(objectMapper);
+
+    JsonItemReader<FenergoWrapper> reader = new JsonItemReader<>();
+    reader.setResource(new ClassPathResource("Fencloud_light.json"));
+    reader.setJsonObjectReader(jsonObjectReader);
+    LOG.info("Reader [Fencloud_light.json] initialized: {} ", reader);
+    return reader;
+  }
+*/
+
   /////////////////////////////////// INICIO ARIADNA //////////////////////////////////////////////////////////////////////////
   @Bean
   public FlatFileItemReader<Ariadna> ariadnaReader() {
@@ -69,18 +153,18 @@ public class BatchConfig {
     LOG.info("Reader [AriadnaBM.csv] initialized: {} ", reader);
     return reader;
   }
-  @Bean
-  public JdbcBatchItemWriter<Ariadna> writerAriadna(DataSource dataSource) {
-    JdbcBatchItemWriter<Ariadna> writer = new JdbcBatchItemWriter<>();
-    writer.setDataSource(dataSource);
-    writer.setSql("""
-            INSERT INTO ariadna (codestr, producto, descripcion) 
-            VALUES (:codestr, :producto, :descripcion)
-        """);
-    writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
-    LOG.info("Writer [AriadnaBM.csv] initialized: {} ", writer);
-    return writer;
-  }
+//  @Bean
+//  public JdbcBatchItemWriter<Ariadna> writerAriadna(DataSource dataSource) {
+//    JdbcBatchItemWriter<Ariadna> writer = new JdbcBatchItemWriter<>();
+//    writer.setDataSource(dataSource);
+//    writer.setSql("""
+//            INSERT INTO ariadna (codestr, producto, descripcion)
+//            VALUES (:codestr, :producto, :descripcion)
+//        """);
+//    writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+//    LOG.info("Writer [AriadnaBM.csv] initialized: {} ", writer);
+//    return writer;
+//  }
 
   /////////////////////////////////// FIN ARIADNA //////////////////////////////////////////////////////////////////////////
 
@@ -323,26 +407,29 @@ public class BatchConfig {
   }
 
 
-  /**
-   * Job
-   * @param jobBuilderFactory
-   * @param processNumoperfrontStep
-   * @param processCurStep
-   * @return
-   */
+
   @Bean
+  public Job job1(JobBuilderFactory jobBuilderFactory, Step jsonstep, JobCompletionNotificationListener listener) {
+    return jobBuilderFactory.get("job1")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .start(jsonstep)
+            .build();
+  }
+/*  @Bean
   public Job job1(JobBuilderFactory jobBuilderFactory, Step processNumoperfrontStep, Step processCurStep,
-                  Step processCounterStep, Step processAriadnaStep ,JobCompletionNotificationListener listener) {
+                  Step processCounterStep, Step processAriadnaStep ,Step processFenergoWorkFlowStep,Step jsonstep, JobCompletionNotificationListener listener) {
 
     return jobBuilderFactory.get("job1")
         .incrementer(new RunIdIncrementer())
         .listener(listener)
-        .start(processAriadnaStep)
+        //.start(processAriadnaStep)
+        .start(jsonstep)
         //.next(processCounterStep)
         //.next(processCurStep)
         //.next(processNumoperfrontStep)
         .build();
-  }
+  }*/
 
 
   /**
@@ -370,6 +457,35 @@ public class BatchConfig {
   }
 
   @Bean
+  public Step jsonstep(StepBuilderFactory stepBuilderFactory,
+                                         JsonItemReader<MyObject> jsonItemReader,
+                                         WorkflowProcessor workflowProcessor,
+                                         WorkFlowWriter workflowWriter) {
+    return stepBuilderFactory.get("processFenergoWorkflow")
+            .<MyObject, MyObject>chunk(10)
+            .reader(jsonItemReaderPrueba())
+            .processor(jsonItemProcessor())
+            .writer(jsonItemWriter())
+            .build();
+  }
+
+/*  @Bean
+  public Step processWorkflowStep(StepBuilderFactory stepBuilderFactory,
+                                  ItemReader<FenergoWrapper> jsonItemReader,
+                                  ItemProcessor<FenergoWrapper, List<Workflow>> workflowProcessor,
+                                  ItemProcessor<List<Workflow>, Workflow> workflowFlattener,
+                                  ItemWriter<Workflow> workflowWriter) {
+
+    return stepBuilderFactory.get("processWorkflowStep")
+            .<FenergoWrapper, Workflow>chunk(10)
+            .reader(jsonItemReader)
+            .processor(new CompositeItemProcessor<>(workflowProcessor, workflowFlattener))
+            .writer(workflowWriter)
+            .build();
+  }*/
+
+
+  @Bean
   public Step processAriadnaStep(StepBuilderFactory stepBuilderFactory, ItemReader<Ariadna> ariadnaReader,
                                  ItemProcessor <Ariadna,Ariadna> processorAriadna, UniqueAriadnaWriter ariadnaWriter) {
     return stepBuilderFactory.get("processAriadnaStep")
@@ -384,6 +500,7 @@ public class BatchConfig {
             .throttleLimit(20) // Limitar el número de hilos concurrentes
             .build();
   }
+
   @Bean
   public Step processCurStep(StepBuilderFactory stepBuilderFactory, ItemReader<CurlPlCatalogo> curPlReader,
                              CurlPlProcessor curProcessor, UniqueCurlPlWriter curWriter) {
