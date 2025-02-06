@@ -2,15 +2,10 @@ package com.murex.config;
 
 import com.murex.model.Ariadna;
 import com.murex.model.Murex;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.murex.model.catologo.CounterPartCatalogo;
 import com.murex.model.catologo.CurlPlCatalogo;
 import com.murex.model.catologo.NumoperfrontCatalogo;
-import com.murex.model.fenergo.FenergoWrapper;
-import com.murex.model.fenergo.JsonEntity;
-import com.murex.model.fenergo.workflow.Workflow;
-import com.murex.model.pruebaJson.MyObject;
-import com.murex.model.pruebaJson.WorkflowMy;
+import com.murex.model.pruebaJson.WorkflowContainer;
 import com.murex.processor.*;
 import com.murex.processor.fenergoprocessor.WorkFlowWriter;
 import com.murex.processor.fenergoprocessor.WorkflowProcessor;
@@ -41,18 +36,14 @@ import org.springframework.batch.item.json.JsonFileItemWriter;
 import org.springframework.batch.item.json.JsonItemReader;
 import org.springframework.batch.item.json.builder.JsonFileItemWriterBuilder;
 import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
-import org.springframework.batch.item.support.CompositeItemProcessor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 @Configuration
 @EnableBatchProcessing
@@ -73,30 +64,47 @@ public class BatchConfig {
 
   @Bean
   @StepScope
-  public JsonItemReader<WorkflowMy> jsonItemReaderPrueba() {
-    return new JsonItemReaderBuilder<WorkflowMy>()
-            .jsonObjectReader(new JacksonJsonObjectReader<>(WorkflowMy.class))
+  public JsonItemReader<WorkflowContainer> jsonItemReaderPrueba() {
+    return new JsonItemReaderBuilder<WorkflowContainer>()
+            .jsonObjectReader(new JacksonJsonObjectReader<>(WorkflowContainer.class))
             .resource(new ClassPathResource("prueba2_1.json"))
             .name("WorkflowMyJsonItemReader")
             .build();
   }
   @Bean
-  public ItemProcessor<WorkflowMy, WorkflowMy> jsonItemProcessor() {
-
+  public ItemProcessor<WorkflowContainer, WorkflowContainer> jsonItemProcessor() {
     return user -> {
       // Process user if needed
       return user;
     };
-
   }
   @Bean
-  public JsonFileItemWriter<WorkflowMy> jsonItemWriter() {
-    return new JsonFileItemWriterBuilder<WorkflowMy>()
+  public JsonFileItemWriter<WorkflowContainer> jsonItemWriter() {
+    return new JsonFileItemWriterBuilder<WorkflowContainer>()
             .jsonObjectMarshaller(new JacksonJsonObjectMarshaller<>())
-            .resource(new FileSystemResource("output2.json"))
+            .resource(new FileSystemResource("output2_1.json"))
             .name("jsonItemWriter")
             .build();
   }
+
+  @Bean
+  public Step jsonstep(StepBuilderFactory stepBuilderFactory) {
+    return stepBuilderFactory.get("processFenergoWorkflow")
+            .<WorkflowContainer, WorkflowContainer>chunk(10)
+            .reader(jsonItemReaderPrueba())
+            .processor(jsonItemProcessor())
+            .writer(jsonItemWriter())
+            .build();
+  }
+  @Bean
+  public Job job1(JobBuilderFactory jobBuilderFactory, Step jsonstep, JobCompletionNotificationListener listener) {
+    return jobBuilderFactory.get("job1")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .start(jsonstep)
+            .build();
+  }
+
   /*    // prueba0 , se lee y escribe en un json output.json a partir del prueba.json
   @Bean
   @StepScope
@@ -439,14 +447,7 @@ public class BatchConfig {
 
 
 
-  @Bean
-  public Job job1(JobBuilderFactory jobBuilderFactory, Step jsonstep, JobCompletionNotificationListener listener) {
-    return jobBuilderFactory.get("job1")
-            .incrementer(new RunIdIncrementer())
-            .listener(listener)
-            .start(jsonstep)
-            .build();
-  }
+
 /*  @Bean
   public Job job1(JobBuilderFactory jobBuilderFactory, Step processNumoperfrontStep, Step processCurStep,
                   Step processCounterStep, Step processAriadnaStep ,Step processFenergoWorkFlowStep,Step jsonstep, JobCompletionNotificationListener listener) {
@@ -487,18 +488,7 @@ public class BatchConfig {
         .build();
   }
 
-  @Bean
-  public Step jsonstep(StepBuilderFactory stepBuilderFactory,
-                       JsonItemReader<WorkflowMy> jsonItemReader,
-                       WorkflowProcessor workflowProcessor,
-                       WorkFlowWriter workflowWriter) {
-    return stepBuilderFactory.get("processFenergoWorkflow")
-            .<WorkflowMy, WorkflowMy>chunk(10)
-            .reader(jsonItemReaderPrueba())
-            .processor(jsonItemProcessor())
-            .writer(jsonItemWriter())
-            .build();
-  }
+
 /*
     // Este es para el prueba.json
   @Bean
