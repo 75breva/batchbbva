@@ -34,6 +34,7 @@ import org.springframework.batch.item.json.JsonFileItemWriter;
 import org.springframework.batch.item.json.JsonItemReader;
 import org.springframework.batch.item.json.builder.JsonFileItemWriterBuilder;
 import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -53,14 +54,74 @@ public class BatchConfig {
   private final JobBuilderFactory jobBuilderFactory;
   private final StepBuilderFactory stepBuilderFactory;
   private final DataSource dataSource;
-//  @Value("classpath:Fencloud_lightSimple.json")
-//  private Resource jsonFile;
-  public BatchConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, DataSource dataSource) {
+  private final ItemProcessor<WorkflowContainer, List<WorkflowMy>> itemProcessor;
+  private final JobCompletionNotificationListener listener;
+  private final JsonItemReader<WorkflowContainer> jsonItemReader;
+  private final JsonFileItemWriter<List<WorkflowMy>> jsonItemWriter;
+
+  public BatchConfig(
+          JobBuilderFactory jobBuilderFactory,
+          StepBuilderFactory stepBuilderFactory,
+          JobCompletionNotificationListener listener,
+          DataSource dataSource,
+          @Qualifier("jsonItemProcessorListWorkflowMy") ItemProcessor<WorkflowContainer, List<WorkflowMy>> itemProcessor,
+          @Qualifier("jsonItemReaderPrueba") JsonItemReader<WorkflowContainer> jsonItemReader,
+          @Qualifier("jsonItemWriterListWorkFlowMy") JsonFileItemWriter<List<WorkflowMy>> jsonItemWriter) {
     this.jobBuilderFactory = jobBuilderFactory;
     this.stepBuilderFactory = stepBuilderFactory;
+    this.listener = listener;
+    this.itemProcessor = itemProcessor;
+    this.jsonItemReader = jsonItemReader;
+    this.jsonItemWriter = jsonItemWriter;
     this.dataSource = dataSource;
   }
+  @Bean
+  public Job job1(Step processAriadnaStep ) {
+    return jobBuilderFactory.get("job1")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .start(jsonStep())
+            .next(processAriadnaStep)
+            .build();
+  }
+  @Bean
+  public Step jsonStep() {
+    return stepBuilderFactory.get("processFenergoWorkflow")
+            .<WorkflowContainer, List<WorkflowMy>>chunk(10)
+            .reader(jsonItemReader)
+            .processor(itemProcessor)
+            .writer(jsonItemWriter)
+            .build();
+  }
 
+/*  @Bean
+  public Job job1(JobBuilderFactory jobBuilderFactory,
+                  Step processAriadnaStep , JobCompletionNotificationListener listener) {
+
+    return jobBuilderFactory.get("job1")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .start(processAriadnaStep)
+            .build();
+  }*/
+/*
+  @Bean
+  public Job job1(JobBuilderFactory jobBuilderFactory, Step jsonstep, JobCompletionNotificationListener listener) {
+    return jobBuilderFactory.get("job1")
+            .incrementer(new RunIdIncrementer())
+            .listener(listener)
+            .start(jsonstep)
+            .build();
+  }
+  @Bean
+  public Step jsonstep(StepBuilderFactory stepBuilderFactory) {
+    return stepBuilderFactory.get("processFenergoWorkflow")
+            .<WorkflowContainer, List<WorkflowMy>>chunk(10)
+            .reader(jsonItemReaderPrueba())
+            .processor(jsonItemProcessorListWorkflowMy())
+            .writer(jsonItemWriterListWorkFlowMy())
+            .build();
+  }
   @Bean
   @StepScope
   public JsonItemReader<WorkflowContainer> jsonItemReaderPrueba() {
@@ -85,13 +146,7 @@ public class BatchConfig {
         return user.getWorkflowMyList();
     };
   }
-//  @Bean
-//  public ItemProcessor<? super WorkflowContainer, ? extends WorkflowMy> jsonItemProcessor1_1() {
-//    return user -> {
-//      // Process user if needed
-//      return (WorkflowMy) user.getWorkflowMyList();
-//    };
-//  }
+
 
   @Bean
   public JsonFileItemWriter<WorkflowContainer> jsonItemWriter() { // Escribimos tal cual viene en el fichero
@@ -120,33 +175,11 @@ public class BatchConfig {
             .build();
   }
 
-  @Bean
-  public Step jsonstep(StepBuilderFactory stepBuilderFactory) {
-    return stepBuilderFactory.get("processFenergoWorkflow")
-            .<WorkflowContainer, List<WorkflowMy>>chunk(10)
-            .reader(jsonItemReaderPrueba())
-            .processor(jsonItemProcessorListWorkflowMy())
-            .writer(jsonItemWriterListWorkFlowMy())
-            .build();
-  }
-//  @Bean
-//  public Step jsonstep2(StepBuilderFactory stepBuilderFactory) {
-//    return stepBuilderFactory.get("processFenergoWorkflow")
-//            .<WorkflowContainer, WorkflowMy>chunk(10)
-//            .reader(jsonItemReaderPrueba())
-//            .processor(jsonItemProcessorListWorkflowMy())
-//            .writer(jsonItemWriterListWorkFlowMy())
-//            .build();
-//  }
+*/
 
-  @Bean
-  public Job job1(JobBuilderFactory jobBuilderFactory, Step jsonstep, JobCompletionNotificationListener listener) {
-    return jobBuilderFactory.get("job1")
-            .incrementer(new RunIdIncrementer())
-            .listener(listener)
-            .start(jsonstep)
-            .build();
-  }
+
+
+
 
 
   /*    // prueba0 , se lee y escribe en un json output.json a partir del prueba.json
@@ -499,8 +532,8 @@ public class BatchConfig {
     return jobBuilderFactory.get("job1")
         .incrementer(new RunIdIncrementer())
         .listener(listener)
-        //.start(processAriadnaStep)
-        .start(jsonstep)
+        .start(processAriadnaStep)
+        //.start(jsonstep)
         //.next(processCounterStep)
         //.next(processCurStep)
         //.next(processNumoperfrontStep)
