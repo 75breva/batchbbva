@@ -1,5 +1,7 @@
-package com.murex.model.pruebaJson;
+package com.murex.model.pruebaJson.config;
 
+import com.murex.model.pruebaJson.model.WorkflowContainer;
+import com.murex.model.pruebaJson.model.WorkflowMy;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

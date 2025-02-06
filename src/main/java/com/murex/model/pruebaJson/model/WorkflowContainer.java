@@ -1,4 +1,4 @@
-package com.murex.model.pruebaJson;
+package com.murex.model.pruebaJson.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

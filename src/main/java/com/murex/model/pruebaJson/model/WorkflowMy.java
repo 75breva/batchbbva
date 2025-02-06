@@ -1,4 +1,4 @@
-package com.murex.model.pruebaJson;
+package com.murex.model.pruebaJson.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,17 +7,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "workflow")
 public class WorkflowMy {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @JsonProperty("isin")
-    private String iSin;
+    @Column(name = "isin")
+    private String isin;
     @JsonProperty("quantity")
+    @Column(name = "quantity")
     private Integer quantity;
     @JsonProperty("customer")
+    @Column(name = "customer")
     private String customer;
 }
 

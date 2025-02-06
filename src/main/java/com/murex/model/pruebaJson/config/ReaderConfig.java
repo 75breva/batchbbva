@@ -1,5 +1,6 @@
-package com.murex.model.pruebaJson;
+package com.murex.model.pruebaJson.config;
 
+import com.murex.model.pruebaJson.model.WorkflowContainer;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.json.JacksonJsonObjectReader;
 import org.springframework.batch.item.json.JsonItemReader;
